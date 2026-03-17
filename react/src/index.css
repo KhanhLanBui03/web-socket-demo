@@ -1,0 +1,152 @@
+:root {
+  font-family: Arial, sans-serif;
+  background: #f2f5f9;
+}
+
+body {
+  margin: 0;
+  background: #f2f5f9;
+}
+
+.app-container {
+  max-width: 768px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.form input {
+  flex: 1;
+  padding: 0.65rem;
+  border: 1px solid #d3d8df;
+  border-radius: 5px;
+}
+.message-list {
+  list-style: none;
+  padding: 0;
+  max-height: 60vh;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* mỗi dòng chat */
+.message-row {
+  display: flex;
+  margin: 8px 0;
+  align-items: flex-end;
+}
+
+/* người khác */
+.message-row.other {
+  justify-content: flex-start;
+}
+
+/* mình */
+.message-row.me {
+  justify-content: flex-end;
+}
+
+/* avatar */
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #3f8efc;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+/* bubble */
+.bubble {
+  max-width: 60%;
+  padding: 10px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* người khác */
+.message-row.other .bubble {
+  background: #e4e6eb;
+  color: #000;
+}
+
+/* mình */
+.message-row.me .bubble {
+  background: #3f8efc;
+  color: white;
+}
+
+/* tên */
+.sender {
+  font-size: 12px;
+  margin-bottom: 2px;
+  opacity: 0.7;
+}
+
+/* nội dung */
+.text {
+  word-break: break-word;
+}
+
+/* join/leave */
+.event-message {
+  text-align: center;
+  font-size: 13px;
+  color: #777;
+  margin: 5px 0;
+}
+.form button {
+  padding: 0.65rem 1rem;
+  background: #3f8efc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+}
+
+.message-list {
+  list-style: none;
+  padding: 0;
+  max-height: 50vh;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+
+.message {
+  padding: 0.55rem;
+  margin-bottom: 0.4rem;
+  border-radius: 5px;
+  border: 1px solid #e1e6ed;
+  background: #fafbff;
+}
+
+.message-join,
+.message-leave {
+  color: #777;
+  font-style: italic;
+}

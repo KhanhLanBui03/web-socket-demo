@@ -1,0 +1,10 @@
+# React
+react/node_modules
+react/dist
+
+# Spring Boot
+demo-websocket/target
+demo-websocket/.idea
+
+# logs
+*.log
