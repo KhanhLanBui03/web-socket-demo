@@ -5,6 +5,7 @@ public class ChatMessage {
     private MessageType type;
     private String content;
     private String sender;
+    private Long createdAt;
 
     public enum MessageType {
         CHAT,
@@ -34,5 +35,12 @@ public class ChatMessage {
 
     public void setSender(String sender) {
         this.sender = sender;
+    }
+    public Long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Long createdAt) {
+        this.createdAt = createdAt;
     }
 }

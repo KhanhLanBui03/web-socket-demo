@@ -6,6 +6,7 @@ interface ChatMessage {
   sender: string;
   content: string;
   type: 'CHAT' | 'JOIN' | 'LEAVE';
+  createdAt?: number;
 }
 
 function App() {
@@ -51,7 +52,10 @@ function App() {
     client.activate();
     clientRef.current = client;
   };
-
+  const formatTime = (timestamp?: number) => {
+    if (!timestamp) return '';
+    return new Date(timestamp).toLocaleTimeString();
+  };
   const sendMessage = () => {
     if (!clientRef.current || !connected || !message.trim()) return;
 
@@ -118,7 +122,11 @@ function App() {
                     <div className="bubble">
                       {!isMe && <div className="sender">{msg.sender}</div>}
                       <div className="text">{msg.content}</div>
+                      <div className="time">
+                        {formatTime(msg.createdAt)}
+                      </div>
                     </div>
+
                   </li>
                 );
               })}
