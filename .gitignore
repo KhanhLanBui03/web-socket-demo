@@ -5,6 +5,7 @@ react/dist
 # Spring Boot
 demo-websocket/target
 demo-websocket/.idea
+demo-websocket/.env
 
 # logs
 *.log

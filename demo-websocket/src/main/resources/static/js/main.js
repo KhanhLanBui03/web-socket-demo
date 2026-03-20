@@ -7,6 +7,7 @@ var messageForm = document.querySelector('#messageForm');
 var messageInput = document.querySelector('#message');
 var messageArea = document.querySelector('#messageArea');
 var connectingElement = document.querySelector('.connecting');
+var leaveButton = document.querySelector('#leave-btn');
 
 var stompClient = null;
 var username = null;
@@ -133,3 +134,21 @@ function getAvatarColor(messageSender) {
 
 usernameForm.addEventListener('submit', connect, true)
 messageForm.addEventListener('submit', sendMessage, true)
+if (leaveButton) {
+  leaveButton.addEventListener('click', function(event) {
+    event.preventDefault();
+    if (stompClient && username) {
+      stompClient.send('/app/chat.sendMessage', {}, JSON.stringify({ sender: username, type: 'LEAVE' }));
+      try {
+        stompClient.disconnect(function() {
+          usernamePage.classList.remove('hidden');
+          chatPage.classList.add('hidden');
+        });
+      } catch (e) {
+        // fallback
+        usernamePage.classList.remove('hidden');
+        chatPage.classList.add('hidden');
+      }
+    }
+  });
+}
