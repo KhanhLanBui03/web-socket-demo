@@ -9,6 +9,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Controller
@@ -16,6 +17,12 @@ public class ChatController {
 
     private final SimpMessagingTemplate messagingTemplate;
     private final ChatMessageService    chatMessageService;
+
+    // Các type này chứa base64 / data lớn — KHÔNG lưu DynamoDB
+    private static final Set<ChatMessage.MessageType> SKIP_SAVE = Set.of(
+            ChatMessage.MessageType.FILE,
+            ChatMessage.MessageType.IMAGE
+    );
 
     public ChatController(SimpMessagingTemplate messagingTemplate,
                           ChatMessageService chatMessageService) {
@@ -25,8 +32,16 @@ public class ChatController {
 
     @MessageMapping("/chat.sendMessage")
     public void sendMessage(@Payload ChatMessage chatMessage) {
-        prepare(chatMessage, ChatMessage.MessageType.CHAT);
-        chatMessageService.save(chatMessage);
+        ChatMessage.MessageType defaultType = chatMessage.getType() == ChatMessage.MessageType.LEAVE
+                ? ChatMessage.MessageType.LEAVE
+                : ChatMessage.MessageType.CHAT;
+        prepare(chatMessage, defaultType);
+
+        // FILE / IMAGE chứa base64 rất lớn → bỏ qua DynamoDB, chỉ broadcast realtime
+        if (!SKIP_SAVE.contains(chatMessage.getType())) {
+            chatMessageService.save(chatMessage);
+        }
+
         broadcast(chatMessage);
     }
 
@@ -35,7 +50,6 @@ public class ChatController {
                         SimpMessageHeaderAccessor headerAccessor) {
         prepare(chatMessage, ChatMessage.MessageType.JOIN);
 
-        // Lưu thông tin session để xử lý disconnect sau này
         Map<String, Object> attrs = headerAccessor.getSessionAttributes();
         if (attrs != null) {
             attrs.put("username", chatMessage.getSender());
@@ -53,17 +67,10 @@ public class ChatController {
         broadcast(chatMessage);
     }
 
-    // ── helpers ──────────────────────────────────────────────────────────────
-
     private void prepare(ChatMessage msg, ChatMessage.MessageType defaultType) {
-        if (msg.getRoomId() == null || msg.getRoomId().isBlank()) {
-            msg.setRoomId("public");
-        }
-        if (msg.getType() == null) {
-            msg.setType(defaultType);
-        }
+        if (msg.getRoomId() == null || msg.getRoomId().isBlank()) msg.setRoomId("public");
+        if (msg.getType() == null) msg.setType(defaultType);
         msg.setCreatedAt(System.currentTimeMillis());
-        // FIX: dùng UUID thay vì ghép chuỗi — tránh trùng messageId
         msg.setMessageId(UUID.randomUUID().toString());
     }
 

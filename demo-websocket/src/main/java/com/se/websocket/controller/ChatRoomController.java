@@ -23,7 +23,10 @@ public class ChatRoomController {
     }
 
     @GetMapping
-    public List<ChatRoom> getAllRooms() {
+    public List<ChatRoom> getAllRooms(@RequestParam(required = false) String username) {
+        if (username != null && !username.isBlank()) {
+            return chatRoomService.findByMember(username);
+        }
         return chatRoomService.findAll();
     }
 
@@ -32,6 +35,15 @@ public class ChatRoomController {
         return chatRoomService.findById(roomId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
+     * Search for public chat rooms by name.
+     * Returns rooms that match the query string (case-insensitive).
+     */
+    @GetMapping("/search")
+    public List<ChatRoom> searchRooms(@RequestParam String q) {
+        return chatRoomService.searchByName(q);
     }
 
     /**
@@ -55,10 +67,12 @@ public class ChatRoomController {
     }
 
     @PostMapping("/{roomId}/join")
-    public ResponseEntity<Void> joinRoom(@PathVariable String roomId,
-                                         @RequestParam String username) {
-        return chatRoomService.join(roomId, username)
-                ? ResponseEntity.ok().build()
+    public ResponseEntity<ChatRoom> joinRoom(@PathVariable String roomId,
+                                             @RequestBody JoinRoomRequest request) {
+        return chatRoomService.join(roomId, request.getUsername())
+                ? chatRoomService.findById(roomId)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build())
                 : ResponseEntity.notFound().build();
     }
 
@@ -74,5 +88,26 @@ public class ChatRoomController {
     public ResponseEntity<Void> deleteRoom(@PathVariable String roomId) {
         chatRoomService.delete(roomId);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Inner class for join request body
+     */
+    public static class JoinRoomRequest {
+        private String username;
+
+        public JoinRoomRequest() {}
+
+        public JoinRoomRequest(String username) {
+            this.username = username;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
     }
 }

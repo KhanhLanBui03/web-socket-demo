@@ -1,87 +1,81 @@
 package com.se.websocket.model;
 
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
-
 public class ChatMessage {
-    private String messageId;
-    private String roomId;
+
+    private String     messageId;
+    private String     roomId;
     private MessageType type;
-    private String content;
-    private String sender;
-    private Long createdAt;
-    private String callType; // AUDIO, VIDEO, NONE
-    private String callAction; // INVITE, ACCEPT, END
+    private String     content;
+    private String     sender;
+    private Long       createdAt;
+    private String     callType;   // AUDIO, VIDEO, NONE
+    private String     callAction; // INVITE, ACCEPT, END
+
+    // ── File / Image (base64 hoặc URL) ───────────────────────────────────────
+    private String fileUrl;   // base64 data URL hoặc S3 URL
+    private String fileName;  // tên file gốc
+    private String fileType;  // "image" | "file"
+    private Long   fileSize;  // bytes
+
+    // ── Location ─────────────────────────────────────────────────────────────
+    private Double latitude;
+    private Double longitude;
+    private String locationName;
 
     public enum MessageType {
         CHAT,
         JOIN,
         LEAVE,
-        CALL
+        CALL,
+        FILE,      // gửi file (pdf, doc, zip...)
+        IMAGE,     // gửi ảnh
+        LOCATION   // chia sẻ vị trí
     }
 
-    public String getMessageId() {
-        return messageId;
-    }
+    // ── Getters / Setters ────────────────────────────────────────────────────
 
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
-    }
+    public String getMessageId()                   { return messageId; }
+    public void   setMessageId(String messageId)   { this.messageId = messageId; }
 
-    public String getRoomId() {
-        return roomId;
-    }
+    public String getRoomId()                      { return roomId; }
+    public void   setRoomId(String roomId)         { this.roomId = roomId; }
 
-    public void setRoomId(String roomId) {
-        this.roomId = roomId;
-    }
+    public MessageType getType()                   { return type; }
+    public void        setType(MessageType type)   { this.type = type; }
 
-    public MessageType getType() {
-        return type;
-    }
+    public String getContent()                     { return content; }
+    public void   setContent(String content)       { this.content = content; }
 
-    public void setType(MessageType type) {
-        this.type = type;
-    }
+    public String getSender()                      { return sender; }
+    public void   setSender(String sender)         { this.sender = sender; }
 
-    public String getContent() {
-        return content;
-    }
+    public Long   getCreatedAt()                   { return createdAt; }
+    public void   setCreatedAt(Long createdAt)     { this.createdAt = createdAt; }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+    public String getCallType()                    { return callType; }
+    public void   setCallType(String callType)     { this.callType = callType; }
 
-    public String getSender() {
-        return sender;
-    }
+    public String getCallAction()                  { return callAction; }
+    public void   setCallAction(String callAction) { this.callAction = callAction; }
 
-    public void setSender(String sender) {
-        this.sender = sender;
-    }
+    public String getFileUrl()                     { return fileUrl; }
+    public void   setFileUrl(String fileUrl)       { this.fileUrl = fileUrl; }
 
-    public Long getCreatedAt() {
-        return createdAt;
-    }
+    public String getFileName()                    { return fileName; }
+    public void   setFileName(String fileName)     { this.fileName = fileName; }
 
-    public void setCreatedAt(Long createdAt) {
-        this.createdAt = createdAt;
-    }
+    public String getFileType()                    { return fileType; }
+    public void   setFileType(String fileType)     { this.fileType = fileType; }
 
-    public String getCallType() {
-        return callType;
-    }
+    public Long   getFileSize()                    { return fileSize; }
+    public void   setFileSize(Long fileSize)       { this.fileSize = fileSize; }
 
-    public void setCallType(String callType) {
-        this.callType = callType;
-    }
+    public Double getLatitude()                    { return latitude; }
+    public void   setLatitude(Double latitude)     { this.latitude = latitude; }
 
-    public String getCallAction() {
-        return callAction;
-    }
+    public Double getLongitude()                   { return longitude; }
+    public void   setLongitude(Double longitude)   { this.longitude = longitude; }
 
-    public void setCallAction(String callAction) {
-        this.callAction = callAction;
-    }
+    public String getLocationName()                        { return locationName; }
+    public void   setLocationName(String locationName)     { this.locationName = locationName; }
 }
-

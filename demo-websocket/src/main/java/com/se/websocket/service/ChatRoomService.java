@@ -48,6 +48,12 @@ public class ChatRoomService {
                 .items().stream().map(this::toRoom).collect(Collectors.toList());
     }
 
+    public List<ChatRoom> findByMember(String username) {
+        return findAll().stream()
+                .filter(r -> !r.isDm() && r.getMembers().contains(username))
+                .collect(Collectors.toList());
+    }
+
     public List<ChatRoom> findGroupRooms() {
         return findAll().stream().filter(r -> !r.isDm()).collect(Collectors.toList());
     }
@@ -97,6 +103,16 @@ public class ChatRoomService {
                 .tableName(tableName)
                 .key(Map.of("roomId", av(roomId)))
                 .build());
+    }
+
+    public List<ChatRoom> searchByName(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return new ArrayList<>();
+        }
+        String lowerQuery = query.toLowerCase();
+        return findGroupRooms().stream()
+                .filter(r -> r.getName().toLowerCase().contains(lowerQuery))
+                .collect(Collectors.toList());
     }
 
     private void put(ChatRoom room) {
