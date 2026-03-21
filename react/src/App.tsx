@@ -25,6 +25,111 @@ import {
   subscribeToUserStatus,
   publishMessage,
 } from './utils/websocket';
+const EMOJI_CATEGORIES = [
+  {
+    label: '😀',
+    name: 'Biểu cảm',
+    emojis: [
+      '😀', '😁', '😂', '🤣', '😃', '😄', '😅', '😆', '😉', '😊', '😋', '😎', '😍', '😘', '🥰', '😗', '😙', '😚',
+      '🙂', '🤗', '🤩', '🤔', '🤨', '😐', '😑', '😶', '🙄', '😏', '😣', '😥', '😮', '🤐', '😯', '😪', '😫', '🥱',
+      '😴', '😌', '😛', '😜', '😝', '🤤', '😒', '😓', '😔', '😕', '🙃', '🫠', '🫢', '🫣', '🫡', '😲', '😳',
+      '🥺', '😦', '😧', '😨', '😰', '😥', '😢', '😭', '😱', '😖', '😣', '😞', '😓', '😩', '😫', '🥵', '🥶',
+      '😡', '😠', '🤬', '😷', '🤒', '🤕'
+    ]
+  },
+
+  {
+    label: '👍',
+    name: 'Cử chỉ',
+    emojis: [
+      '👍', '👎', '👏', '🙌', '🤝', '🙏', '✌️', '🤞', '💪', '🫶', '👋', '✋', '🤚', '🖐️', '🖖',
+      '👌', '🤌', '🤏', '☝️', '👆', '👇', '👉', '👈', '✊', '👊', '🤛', '🤜', '🤲'
+    ]
+  },
+
+  {
+    label: '❤️',
+    name: 'Tim',
+    emojis: [
+      '❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎',
+      '💔', '❣️', '💕', '💞', '💓', '💗', '💖', '💘', '💝',
+      '🔥', '✨', '💫', '⭐', '🌟', '💥', '🎉', '🎊'
+    ]
+  },
+
+  {
+    label: '🐶',
+    name: 'Động vật',
+    emojis: [
+      '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁',
+      '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🐤', '🦆', '🦅', '🦉',
+      '🦋', '🐝', '🐛', '🐌', '🐞', '🐜', '🪲', '🐢', '🐍', '🦎',
+      '🐙', '🦑', '🐡', '🐠', '🐟', '🐬', '🐳', '🦈'
+    ]
+  },
+
+  {
+    label: '🍔',
+    name: 'Đồ ăn',
+    emojis: [
+      '🍕', '🍔', '🍟', '🌭', '🍿', '🥓', '🥚', '🍳', '🥞', '🧇',
+      '🍗', '🍖', '🥩', '🍤', '🍣', '🍱', '🍜', '🍝', '🍲',
+      '🥗', '🥘', '🍛', '🍚', '🍞', '🥖', '🧀', '🍩', '🍪', '🎂', '🍰'
+    ]
+  },
+
+  {
+    label: '☕',
+    name: 'Đồ uống',
+    emojis: [
+      '☕', '🍵', '🧋', '🥤', '🧃', '🍺', '🍻', '🥂', '🍷', '🥃', '🍸', '🍹', '🍾'
+    ]
+  },
+
+  {
+    label: '⚽',
+    name: 'Thể thao',
+    emojis: [
+      '⚽', '🏀', '🏈', '⚾', '🎾', '🏐', '🏉', '🎱', '🏓', '🏸',
+      '🥊', '🥋', '🎽', '🛹', '⛸️', '🎿', '🏋️', '🤸', '🏊', '🚴'
+    ]
+  },
+
+  {
+    label: '🚗',
+    name: 'Phương tiện',
+    emojis: [
+      '🚗', '🚕', '🚙', '🚌', '🚎', '🏎️', '🚓', '🚑', '🚒',
+      '🚜', '✈️', '🚀', '🛸', '🚁', '🚢', '⛵', '🚤', '🚂'
+    ]
+  },
+
+  {
+    label: '💡',
+    name: 'Đồ vật',
+    emojis: [
+      '📱', '💻', '🖥️', '⌨️', '🖱️', '💡', '🔦', '📷', '📸',
+      '📞', '☎️', '📺', '🎮', '🧸', '🛏️', '🚪', '🔑', '💰'
+    ]
+  },
+
+  {
+    label: '🎵',
+    name: 'Âm nhạc',
+    emojis: [
+      '🎵', '🎶', '🎼', '🎤', '🎧', '🎷', '🎸', '🎹', '🥁', '🎺'
+    ]
+  },
+
+  {
+    label: '🏳️',
+    name: 'Cờ',
+    emojis: [
+      '🏳️', '🏴', '🏁', '🚩', '🏳️‍🌈', '🏳️‍⚧️',
+      '🇻🇳', '🇺🇸', '🇯🇵', '🇰🇷', '🇨🇳', '🇬🇧', '🇫🇷', '🇩🇪'
+    ]
+  }
+];
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('login');
@@ -54,7 +159,7 @@ export default function App() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const imageInputRef = useRef<HTMLInputElement | null>(null);
-
+  const [emojiTab, setEmojiTab] = useState(0);
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
   useEffect(() => { const h = (e: MouseEvent) => { if (!(e.target as HTMLElement).closest('.emoji-zone')) setShowEmoji(false); }; document.addEventListener('mousedown', h); return () => document.removeEventListener('mousedown', h); }, []);
   useEffect(() => () => { subscriptionRef.current?.unsubscribe(); userSubRef.current?.unsubscribe(); clientRef.current?.deactivate(); }, []);
@@ -681,11 +786,19 @@ export default function App() {
                   </button>
                   {showEmoji && (
                     <div className="emoji-picker">
+                      <div className="emoji-tabs">
+                        {EMOJI_CATEGORIES.map((cat, idx) => (
+                          <button key={idx} type="button"
+                            className={`emoji-tab-btn ${emojiTab === idx ? 'active' : ''}`}
+                            onClick={() => setEmojiTab(idx)}
+                            title={cat.name}
+                          >{cat.label}</button>
+                        ))}
+                      </div>
+                      <div className="emoji-tab-label">{EMOJI_CATEGORIES[emojiTab].name}</div>
                       <div className="emoji-grid">
-                        {EMOJI_LIST.map(e => (
-                          <button key={e} type="button" className="ec" onClick={() => insertEmoji(e)}>
-                            {e}
-                          </button>
+                        {EMOJI_CATEGORIES[emojiTab].emojis.map(e => (
+                          <button key={e} type="button" className="ec" onClick={() => insertEmoji(e)}>{e}</button>
                         ))}
                       </div>
                     </div>
